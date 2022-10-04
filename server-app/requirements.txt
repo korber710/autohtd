@@ -1,0 +1,8 @@
+flask
+pytvdbapi
+psycopg2
+requests
+pytz
+flask-cors
+tvdb_api
+tpb

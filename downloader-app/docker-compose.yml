@@ -1,0 +1,26 @@
+# Use the .env file with HOST_IP and DB_SECRET values to build
+# eg. docker-compose build
+# Then use the env file to bring the containers up
+# eg. docker-compose --env-file .env up -d
+
+# The tv-downloader service runs the tv-download-app
+tv-downloader:
+  build: ..
+  dockerfile: ./downloader-app/Dockerfile
+  command: python -u tv-download-app.py --host-ip=$HOST_IP --db-secret=$DB_SECRET
+  volumes:
+    - /home:/home
+    - /media:/media
+  tty: true
+  container_name: tv-downloader
+
+# The movie-downloader service runs the movie-download-app
+movie-downloader:
+  build: ..
+  dockerfile: ./downloader-app/Dockerfile
+  command: python -u movie-download-app.py --host-ip=$HOST_IP --db-secret=$DB_SECRET
+  volumes:
+    - /home:/home
+    - /media:/media
+  tty: true
+  container_name: movie-downloader

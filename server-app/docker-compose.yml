@@ -1,0 +1,19 @@
+# Use the command below to build from within the ./server-app directory
+# eg. docker-compose build
+# Pass values with an .env file with HOST_IP, DB_SECRET and HDD_PATH values to run
+# Then use the env file to bring the containers up
+# eg. docker-compose --env-file .env up -d
+
+# The server-app service runs the back-end server app
+server-app:
+  build: ..
+  dockerfile: ./server-app/Dockerfile
+  command: python -u server-app.py --host-ip="$HOST_IP" --db-secret="$DB_SECRET" --hdd-path="$HDD_PATH"
+  volumes:
+    - /home:/home
+    - /media:/media
+    - .:/app
+  ports:
+    - 5000:5000
+  tty: true
+  container_name: server-app

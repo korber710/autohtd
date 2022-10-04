@@ -1,0 +1,8 @@
+pytvdbapi
+tpblite
+psycopg2-binary
+requests
+pytz
+tvdb_api
+gazpacho
+python-qbittorrent
