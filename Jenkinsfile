@@ -2,29 +2,32 @@ pipeline {
     agent {
         label 'Home'
     }
-    environment {
-        SECRET_FILE = credentials('secret-file')
-    }
+    // environment {
+    //     SECRET_FILE = credentials('secret-file')
+    // }
     stages {
         stage('Build') {
             steps {
                 script {
+                    withCredentials([file(credentialsId: 'secret-file', variable: 'SECRET_FILE')]) {
+                        sh "cp $SECRET_FILE .env"
+                    }
                     // Build doownloader-app docker
                     dir("downloader-app") {
                         sh 'ls -a'
-                        sh 'docker-compose --env-file $SECRET_FILE build'
+                        sh 'docker-compose build'
                     }
 
                     // Build back-end
                     dir("server-app") {
                         sh 'ls -a'
-                        sh 'docker-compose --env-file $SECRET_FILE build'
+                        sh 'docker-compose build'
                     }
 
                     // Build front-end
                     dir("dashboard-app") {
                         sh 'ls -a'
-                        sh 'docker-compose --env-file $SECRET_FILE build'
+                        sh 'docker-compose build'
                     }
                 }
             }
@@ -59,21 +62,21 @@ pipeline {
                 script {
                     // Bring up downloader-app
                     dir("downloader-app") {
-                        sh 'docker-compose --env-file $SECRET_FILE up -d'
+                        sh 'docker-compose --env-file .env up -d'
                         sleep 5
                         sh 'docker ps -a'
                     }
 
                     // Bring up back-end
                     dir("server-app") {
-                        sh 'docker-compose --env-file $SECRET_FILE up -d'
+                        sh 'docker-compose --env-file .env up -d'
                         sleep 5
                         sh 'docker ps -a'
                     }
 
                     // Bring up front-end
                     dir("dashboard-app") {
-                        sh 'docker-compose --env-file $SECRET_FILE up -d'
+                        sh 'docker-compose --env-file .env up -d'
                         sleep 5
                         sh 'docker ps -a'
                     }
