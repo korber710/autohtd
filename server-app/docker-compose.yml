@@ -5,20 +5,20 @@
 # eg. docker-compose --env-file .env up -d
 
 version: "3.9"
-
-# The server-app service runs the back-end server app
-server-app:
-  build: ..
-  dockerfile: ./server-app/Dockerfile
-  command: python -u server-app.py --host-ip="$HOST_IP" --db-secret="$DB_SECRET" --hdd-path="$HDD_PATH"
-  volumes:
-    - /home:/home
-    - /media:/media
-    - .:/app
-  ports:
-    - 5000:5000
-  tty: true
-  container_name: server-app
-  logging:
-    options:
-      max-size: "10m"
+services:
+  # The server-app service runs the back-end server app
+  server-app:
+    build: ..
+    dockerfile: ./server-app/Dockerfile
+    command: python -u server-app.py --host-ip="$HOST_IP" --db-secret="$DB_SECRET" --hdd-path="$HDD_PATH"
+    volumes:
+      - /home:/home
+      - /media:/media
+      - .:/app
+    ports:
+      - 5000:5000
+    tty: true
+    container_name: server-app
+    logging:
+      options:
+        max-size: "10m"

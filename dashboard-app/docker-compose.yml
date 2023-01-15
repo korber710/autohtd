@@ -2,14 +2,14 @@
 # eg. docker-compose build
 
 version: "3.9"
-
-# The dashboard service runs the front-end app
-dashboard:
-  build: .
-  dockerfile: Dockerfile
-  ports:
-    - '80:80'
-  container_name: dashboard-app
-  logging:
-    options:
-      max-size: "10m"
+services:
+  # The dashboard service runs the front-end app
+  dashboard:
+    build: .
+    dockerfile: Dockerfile
+    ports:
+      - '80:80'
+    container_name: dashboard-app
+    logging:
+      options:
+        max-size: "10m"
