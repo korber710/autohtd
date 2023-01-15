@@ -1,8 +1,8 @@
 pipeline {
     agent none
-    environment {
-        SECRET_FILE = credentials('secret-file')
-    }
+    // environment {
+    //     SECRET_FILE = credentials('secret-file')
+    // }
     stages {
         stage('Build') {
             steps {
