@@ -7,8 +7,9 @@ version: "3.9"
 services:
   # The tv-downloader service runs the tv-download-app
   tv-downloader:
-    build: ..
-    dockerfile: ./downloader-app/Dockerfile
+    build: 
+      context: ..
+      dockerfile: ./downloader-app/Dockerfile
     command: python -u tv-download-app.py --host-ip=$HOST_IP --db-secret=$DB_SECRET
     volumes:
       - /home:/home

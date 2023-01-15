@@ -5,8 +5,9 @@ version: "3.9"
 services:
   # The dashboard service runs the front-end app
   dashboard:
-    build: .
-    dockerfile: Dockerfile
+    build:
+      context: .
+      dockerfile: Dockerfile
     ports:
       - '80:80'
     container_name: dashboard-app
