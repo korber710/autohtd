@@ -1,4 +1,5 @@
 pipeline {
+    agent none
     environment {
         SECRET_FILE = credentials('secret-file')
     }
