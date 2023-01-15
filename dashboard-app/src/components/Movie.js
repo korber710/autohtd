@@ -47,7 +47,7 @@ export class Movie extends React.Component {
         const data = {
             name: this.state.foundMovie
         }
-        axios.post(`http://${REACT_APP_HOST_IP}:5000/api/v1/movie/add`, data)
+        axios.post(`http://${process.env.REACT_APP_HOST_IP}:5000/api/v1/movie/add`, data)
         .then(res => {
             console.log(res.data)
             toast.success(
@@ -70,7 +70,7 @@ export class Movie extends React.Component {
                     <Spinner style={{display: 'inline-block'}} animation="grow" variant="dark" />
                 </div>
         })
-        axios.post(`http://${REACT_APP_HOST_IP}:5000/api/v1/movie/search`, {name: this.state.searchMovie})
+        axios.post(`http://${process.env.REACT_APP_HOST_IP}:5000/api/v1/movie/search`, {name: this.state.searchMovie})
         .then(res => {
             this.setState({returnDesc: res.data.description})
             this.setState({foundMovie: res.data.data.data[0].title_long})
