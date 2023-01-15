@@ -68,7 +68,6 @@ while(True):
         cur.execute("SELECT * FROM public.tv_shows")
         items = cur.fetchall()
         print(items)
-        exit(0)
 
         # get active torrents
         results = torrent_client.getTorrents()

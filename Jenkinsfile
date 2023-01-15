@@ -68,24 +68,26 @@ pipeline {
                 script {
                     // Bring up downloader-app
                     dir("downloader-app") {
-                        sh 'docker-compose --env-file .env up -d'
+                        sh 'docker-compose up -d'
                         sleep 5
-                        sh 'docker ps -a'
+                        sh 'docker-compose logs'
                     }
 
                     // Bring up back-end
                     dir("server-app") {
-                        sh 'docker-compose --env-file .env up -d'
+                        sh 'docker-compose up -d'
                         sleep 5
-                        sh 'docker ps -a'
+                        sh 'docker-compose logs'
                     }
 
                     // Bring up front-end
                     dir("dashboard-app") {
-                        sh 'docker-compose --env-file .env up -d'
+                        sh 'docker-compose up -d'
                         sleep 5
-                        sh 'docker ps -a'
+                        sh 'docker-compose logs'
                     }
+
+                    sh "docker ps -a"
                 }
             }
         }
