@@ -1,6 +1,10 @@
-import requests
 from os import environ
 from qbittorrent import Client
+import logging
+import sys
+
+# Setup logger
+logger = logging.getLogger()
 
 class QBittorrentController:
     def __init__(self, ip="192.168.1.197", port=8113):
@@ -16,14 +20,17 @@ class QBittorrentController:
             "description": "",
             "data": ""
         }
+        logger.info("Logging in to QBittorrent")
         try:
             self.qb.login("admin", self.password)
-        except:
+        except Exception as e:
             returnObj["result"] = -1
             returnObj["description"] = "login:: failed to login"
+            logger.exception(e)
             return returnObj
         returnObj["result"] = 0
         returnObj["description"] = "login successful"
+        logger.info("Login successful")
         return returnObj
     def addTorrent(self, magnet):
         returnObj = {
@@ -31,16 +38,19 @@ class QBittorrentController:
             "description": "",
             "data": ""
         }
+        logger.info("Adding torrent")
         try:
             self.qb.download_from_link(magnet)
-        except:
+        except Exception as e:
             returnObj["result"] = -1
             returnObj["description"] = "addTorrent:: failed to add torrent"
+            logger.exception(e)
             return returnObj
         torrentID = magnet.split("magnet:?xt=urn:btih:")[1].split("&")[0].lower()
         returnObj["result"] = 0
         returnObj["description"] = "addTorrent successful"
         returnObj["data"] = str(torrentID)
+        logger.info(f"Torrent added - {torrentID}")
         return returnObj
     def removeTorrent(self, id):
         returnObj = {
@@ -48,14 +58,17 @@ class QBittorrentController:
             "description": "",
             "data": ""
         }
+        logger.info(f"Removing torrent {id}")
         try:
             self.qb.delete(id)
-        except:
+        except Exception as e:
             returnObj["result"] = -1
             returnObj["description"] = "removeTorrent:: failed to remove"
+            logger.exception(e)
             return returnObj
         returnObj["result"] = 0
         returnObj["description"] = "removeTorrent successful"
+        logger.info("Torrent removed")
         return returnObj
     def getTorrents(self):
         returnObj = {
@@ -63,15 +76,18 @@ class QBittorrentController:
             "description": "",
             "data": ""
         }
+        logger.info("Getting torrents")
         try:
             torrents = self.qb.torrents()
-        except:
+        except Exception as e:
             returnObj["result"] = -1
             returnObj["description"] = "getTorrents:: failed to get torrents"
+            logger.exception(e)
             return returnObj
         returnObj["result"] = 0
         returnObj["description"] = "getTorrents successful"
         returnObj["data"] = torrents
+        logger.info("Successfully got torrents")
         return returnObj
     def getTorrentFiles(self, id):
         returnObj = {
@@ -79,15 +95,18 @@ class QBittorrentController:
             "description": "",
             "data": ""
         }
+        logger.info("Getting torrent files")
         try:
             results = self.qb.get_torrent_files(id)
-        except:
+        except Exception as e:
             returnObj["result"] = -1
             returnObj["description"] = "getTorrentFiles:: failed to send request"
+            logger.exception(e)
             return returnObj
         returnObj["result"] = 0
         returnObj["description"] = "getTorrentFiles successful"
         returnObj["data"] = results
+        logger.info("Successfully got torrent files")
         return returnObj
 
 if __name__ == "__main__":

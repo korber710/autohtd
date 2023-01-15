@@ -17,6 +17,16 @@ import shutil
 import pytz
 import difflib
 import argparse
+import sys
+import logging
+
+# setup logger
+logger = logging.getLogger()
+logger.setLevel(logging.DEBUG)
+logger_format = logging.Formatter('%(asctime)s [%(levelname)s]\t%(message)s')
+handler = logging.StreamHandler(stream=sys.stdout)
+handler.setFormatter(logger_format)
+logger.addHandler(handler)
 
 # add custom libs
 from qbittorrent_library.qbittorrent_library import QBittorrentController
@@ -45,9 +55,10 @@ while(True):
     if (datetime.now().astimezone(EST).hour > 7) and (datetime.now().astimezone(EST).hour < 23):
         # create tv search object
         try:
+            logger.info("Connecting to search client API")
             tv_search_client = TVSearchController()
-        except:
-            print("tv database error", flush=True)
+        except Exception as e:
+            logger.exception(e)
             continue
         
         # create torrent client object
