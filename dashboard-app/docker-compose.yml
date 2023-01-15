@@ -9,3 +9,6 @@ dashboard:
   ports:
     - '80:80'
   container_name: dashboard-app
+  logging:
+    options:
+      max-size: "10m"

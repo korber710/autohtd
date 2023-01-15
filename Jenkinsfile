@@ -1,6 +1,6 @@
 pipeline {
-    agent {
-        label 'Home'
+    environment {
+        SECRET_FILE = credentials('secret-file')
     }
     stages {
         stage('Build') {
@@ -56,21 +56,21 @@ pipeline {
                 script {
                     // Bring up downloader-app
                     dir("downloader-app") {
-                        sh 'docker-compose --env-file .env up -d'
+                        sh 'docker-compose --env-file $SECRET_FILE up -d'
                         sleep 5
                         sh 'docker ps -a'
                     }
 
                     // Bring up back-end
                     dir("server-app") {
-                        sh 'docker-compose --env-file .env up -d'
+                        sh 'docker-compose --env-file $SECRET_FILE up -d'
                         sleep 5
                         sh 'docker ps -a'
                     }
 
                     // Bring up front-end
                     dir("dashboard-app") {
-                        sh 'docker-compose --env-file .env up -d'
+                        sh 'docker-compose --env-file $SECRET_FILE up -d'
                         sleep 5
                         sh 'docker ps -a'
                     }

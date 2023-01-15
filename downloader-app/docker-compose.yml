@@ -13,6 +13,9 @@ tv-downloader:
     - /media:/media
   tty: true
   container_name: tv-downloader
+  logging:
+    options:
+      max-size: "10m"
 
 # The movie-downloader service runs the movie-download-app
 movie-downloader:
@@ -24,3 +27,6 @@ movie-downloader:
     - /media:/media
   tty: true
   container_name: movie-downloader
+  logging:
+    options:
+      max-size: "10m"

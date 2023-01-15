@@ -5,7 +5,7 @@ from qbittorrent import Client
 class QBittorrentController:
     def __init__(self, ip="192.168.1.197", port=8113):
         self.cookies = None
-        self.password = environ.get('QBITTORRENT_PASSWORD', 'Motocross#710')
+        self.password = environ.get('QBITTORRENT_PASSWORD')
         self.requestID = 0
         self.ip = ip
         self.port = port

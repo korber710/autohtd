@@ -17,3 +17,6 @@ server-app:
     - 5000:5000
   tty: true
   container_name: server-app
+  logging:
+    options:
+      max-size: "10m"
