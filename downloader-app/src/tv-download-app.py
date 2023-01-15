@@ -37,6 +37,7 @@ from episodate_library.episodate_library import *
 parser = argparse.ArgumentParser()
 parser.add_argument('--host-ip', help='The IP used for the torrent client and the PostgreSQL server')
 parser.add_argument('--db-secret', help='PostgreSQL username:password')
+parser.add_argument('--torrent-client-secret', help='Password for torrent client')
 args = parser.parse_args()
 
 # constants
@@ -45,6 +46,7 @@ GMT = pytz.timezone("GMT")
 HOST_IP = args.host_ip
 POSTGRES_USER = args.db_secret.split(":")[0]
 POSTGRES_PASSWORD = args.db_secret.split(":")[1]
+TORRENT_CLIENT_PASSWORD = args.torrent_client_secret
 
 # header
 print("\n\n==============================\nAuto TV Torrent Application\n==============================\n\n", flush=True)
@@ -62,7 +64,7 @@ while(True):
             continue
         
         # create torrent client object
-        torrent_client = QBittorrentController(ip=HOST_IP)
+        torrent_client = QBittorrentController(ip=HOST_IP, password=TORRENT_CLIENT_PASSWORD)
         results = torrent_client.login()
         if results["result"] != 0:
             print(results["description"], flush=True)

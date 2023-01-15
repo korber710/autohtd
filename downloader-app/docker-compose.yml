@@ -10,7 +10,7 @@ services:
     build: 
       context: ..
       dockerfile: downloader-app/Dockerfile
-    command: python -u tv-download-app.py --host-ip=$HOST_IP --db-secret=$DB_SECRET
+    command: python -u tv-download-app.py --host-ip=$HOST_IP --db-secret=$DB_SECRET --torrent-client-secret=$QBITTORRENT_PASSWORD
     volumes:
       - /home:/home
       - /media:/media
