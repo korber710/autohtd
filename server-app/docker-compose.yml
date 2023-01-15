@@ -4,6 +4,8 @@
 # Then use the env file to bring the containers up
 # eg. docker-compose --env-file .env up -d
 
+version: "3.9"
+
 # The server-app service runs the back-end server app
 server-app:
   build: ..

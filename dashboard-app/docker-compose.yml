@@ -1,6 +1,7 @@
 # Build from within this directory
 # eg. docker-compose build
-# 
+
+version: "3.9"
 
 # The dashboard service runs the front-end app
 dashboard:

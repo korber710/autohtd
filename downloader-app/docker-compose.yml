@@ -3,6 +3,8 @@
 # Then use the env file to bring the containers up
 # eg. docker-compose --env-file .env up -d
 
+version: "3.9"
+
 # The tv-downloader service runs the tv-download-app
 tv-downloader:
   build: ..
