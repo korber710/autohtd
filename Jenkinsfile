@@ -12,19 +12,19 @@ pipeline {
                     // Build doownloader-app docker
                     dir("downloader-app") {
                         sh 'ls -a'
-                        sh 'docker-compose build'
+                        sh 'docker-compose --env-file $SECRET_FILE build'
                     }
 
                     // Build back-end
                     dir("server-app") {
                         sh 'ls -a'
-                        sh 'docker-compose build'
+                        sh 'docker-compose --env-file $SECRET_FILE build'
                     }
 
                     // Build front-end
                     dir("dashboard-app") {
                         sh 'ls -a'
-                        sh 'docker-compose build'
+                        sh 'docker-compose --env-file $SECRET_FILE build'
                     }
                 }
             }
