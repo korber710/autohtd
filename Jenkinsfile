@@ -1,5 +1,7 @@
 pipeline {
-    agent any
+    agent {
+        label 'Home'
+    }
     environment {
         SECRET_FILE = credentials('secret-file')
     }
