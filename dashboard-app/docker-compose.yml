@@ -11,6 +11,8 @@ services:
     ports:
       - '80:80'
     container_name: dashboard-app
+    environment:
+      - REACT_APP_HOST_IP
     logging:
       options:
         max-size: "10m"
