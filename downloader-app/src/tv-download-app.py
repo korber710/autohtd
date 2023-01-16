@@ -79,11 +79,9 @@ while(True):
         # grab entries from tv_shows database
         cur.execute("SELECT * FROM public.tv_shows")
         items = cur.fetchall()
-        # print(items)
 
         # get active torrents
         results = torrent_client.getTorrents()
-        print("getTorrents: {}".format(results), flush=True)
         if results["result"] != 0:
             torrent_count = 0
             continue
@@ -124,8 +122,8 @@ while(True):
                 show_details = results["data"]["tvShow"]
                 season_list = get_season_numbers(show_details)
             except Exception as e:
-                print(e, flush=True)
-                print("show id not found {}".format(show_obj["tv_shows"][show_index]["id"]), flush=True)
+                logger.exception(e)
+                logger.error(f"Show id not found {show_obj['tv_shows'][show_index]['id']}")
                 continue
             try:
                 season = get_season_episodes(show_details, item[2])
@@ -204,7 +202,7 @@ while(True):
                                                 i["torrentID"] = torrentID
                                         cur.execute("UPDATE public.tv_shows SET data = '{}' WHERE id = {}".format(json.dumps(data), item[0]))
                                         updatedRows = cur.rowcount
-                                        print("updated rows {}".format(updatedRows), flush=True)
+                                        logger.info(f"Updated rows {updatedRows}")
                                         conn.commit()
 
                                 # torrent hasn't been completed
@@ -225,10 +223,10 @@ while(True):
                                         torrentName = content["name"]
                                         # check if dir
                                         if os.path.isdir(os.path.join(downloadedPath, torrentName)):
-                                            print("dir")
+                                            logger.debug("dir")
                                             isDir = True
                                             parentDir = torrentName
-                                            ### find largest file and make that filename, need to delete dir after
+                                            # find largest file and make that filename, need to delete dir after
                                             results = torrent_client.getTorrentFiles(episodeData["torrentID"])
                                             size = 0
                                             largestFile = None
@@ -239,68 +237,69 @@ while(True):
                                             torrentFilename = largestFile["name"]
                                             logger.info(f"torrentFilename: {torrentFilename}")
                                             if os.path.exists(os.path.join(downloadedPath, parentDir)):
-                                                print("parent path to remove exists")
+                                                logger.debug("Parent path to remove exists")
                                             else:
-                                                print("parent path to remove is bad")
+                                                logger.error("Parent path to remove is bad")
                                                 continue
                                         else:
-                                            print("file")
+                                            logger.debug("file")
                                             isDir = False
                                             torrentFilename = content["name"]
                                         torrentPath = os.path.join(downloadedPath, torrentFilename)
-                                        print("path: {}".format(torrentPath))
+                                        logger.debug(f"path: {torrentPath}")
                                         if os.path.exists(torrentPath):
-                                            ### check path on database
+                                            # check path on database
                                             if os.path.exists(os.path.join(os.sep, *item[3].split(","))) == False:
-                                                print("path doesn't exist")
-                                                print(os.path.join(os.sep, *item[3].split(",")))
+                                                logger.warn("Path doesn't exist")
+                                                logger.debug(os.path.join(os.sep, *item[3].split(",")))
                                                 try:
                                                     os.makedirs(os.path.join(os.sep, *item[3].split(",")))
-                                                except:
-                                                    print("error making dir")
+                                                except Exception as e:
+                                                    logger.exception(e)
                                                     continue
                                                 if os.path.exists(os.path.join(os.sep, *item[3].split(","))) == False:
-                                                    print("path still doesn't exist")
+                                                    logger.error("Path still doesn't exist")
                                                     continue
-                                            ### delete torrent
-                                            results = torrent_client.removeTorrent(episodeData["torrentID"])
+                                            
+                                            # delete torrent
+                                            _ = torrent_client.removeTorrent(episodeData["torrentID"])
                                             torrent_count -= 1
-                                            print(results)
                                             for i in data["episodes"]:
                                                 if i["episodeID"] == episodeID:
                                                     i["torrentID"] = ""
                                                     i["completed"] = True
                                             cur.execute("UPDATE public.tv_shows SET data = '{}' WHERE id = {}".format(json.dumps(data), item[0]))
                                             updatedRows = cur.rowcount
-                                            print("updated rows {}".format(updatedRows))
+                                            logger.debug(f"Updated rows {updatedRows}")
                                             conn.commit()
                                             shutil.move(torrentPath, os.path.join(os.sep, *item[3].split(",")))
-                                            print("copied {} to {}".format(torrentPath, os.path.join(os.sep, *item[3].split(","))))
+                                            logger.info(f"Copied {torrentPath} to {os.path.join(os.sep, *item[3].split(','))}")
                                             if isDir:
                                                 if os.path.exists(os.path.join(downloadedPath, parentDir)):
                                                     shutil.rmtree(os.path.join(downloadedPath, parentDir))
-                                                    print("removed parent path")
+                                                    logger.debug("Removed parent path")
                                     else:
-                                        print("not complete - progress {}".format(100 * content["progress"]))
-                ### create episode entry in database because it didn't find it
+                                        logger.info(f"Torrent not complete - progress {100 * content['progress']}")
+
+                # create episode entry in database because it didn't find it
                 if episodeExists == False:
                     try:
-                        # firstAiredDate = datetime.strptime(season[episode]["firstAired"], "%Y-%m-%d").date()
                         firstAiredDate = datetime.strptime(episode["air_date"], "%Y-%m-%d %H:%M:%S")
                         firstAiredDate = GMT.localize(firstAiredDate)
                     except:
-                        # print("first aired: {}".format(season[episode]["firstAired"]), flush=True)
                         firstAiredDate = datetime.today().astimezone(EST) - timedelta(days=1)
                     logger.info(f"Episode: {episodeID}, Date Computed: {firstAiredDate.astimezone(EST).date()}, Date: {episode['air_date']}")
+
                     if firstAiredDate.astimezone(EST).date() < datetime.today().astimezone(EST).date():
-                        ### create entry
-                        print("need to create {}".format(episodeID))
+                        # create entry
+                        logger.info(f"Need to create {episodeID}")
                         data["episodes"].append({"episodeID": episodeID, "torrentID": "", "completed": False})
                         cur.execute("UPDATE public.tv_shows SET data = '{}' WHERE id = {}".format(json.dumps(data), item[0]))
                         updatedRows = cur.rowcount
-                        print("updated rows {}".format(updatedRows))
+                        logger.debug(f"Updated rows {updatedRows}")
                         conn.commit()
-                        ### search for torrent with show name and episode id
+
+                        # search for torrent with show name and episode id
                         if item[1] == "Big Brother":
                             searchQuery = '{} US {}'.format(item[1], episodeID)
                         elif item[1] == "Celebrity Big Brother (US)":
@@ -311,38 +310,30 @@ while(True):
                             searchQuery = 'The Bachelor The Greatest Seasons Ever {}'.format(episodeID)
                         else:
                             searchQuery = '{} {}'.format(item[1], episodeID)
+                        
+                        # search for the torret on the web
                         results = torrent_search_client.ottsx_search(searchQuery)
                         if results["result"] != 0:
-                            print(results["description"])
                             continue
                         magnetLink = results["data"]
-                        print(magnetLink, flush=True)
-                        # if len(torrents) == 0:
-                        #     print("no torrents for {} {}".format(item[1], episodeID))
-                        # else:
-                        if (torrent_count < 16):
-                            # torrent = torrents.getBestTorrent(min_seeds=5, min_filesize='200 MiB', max_filesize='1 GiB')
-                            # if torrent == None:
-                            #     print("didn't find any that met criteria")
-                            #     continue
-                            # print(torrent.title)
+                        logger.debug(f"Magnet Link: {magnetLink}")
+
+                        if (torrent_count < 8):
                             results = torrent_client.addTorrent(magnetLink)
-                            # print(torrent.filesize)
                             if results["result"] != 0:
-                                print(results["description"])
                                 continue
                             torrent_count += 1
                             torrentID = results["data"]
-                            print("torrent ID: {}".format(torrentID))
+                            logger.info(f"Torrent ID: {torrentID}")
                             results = torrent_client.getTorrents()
-                            print(results)
-                            ### push torrent id to database
+
+                            # push torrent id to database
                             for i in data["episodes"]:
                                 if i["episodeID"] == episodeID:
                                     i["torrentID"] = torrentID
                             cur.execute("UPDATE public.tv_shows SET data = '{}' WHERE id = {}".format(json.dumps(data), item[0]))
                             updatedRows = cur.rowcount
-                            print("updated rows {}".format(updatedRows))
+                            logger.info(f"Updated rows {updatedRows}")
                             conn.commit()
 
     # wait 1 hour
