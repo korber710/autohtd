@@ -158,7 +158,7 @@ while(True):
                     if firstAiredDate.astimezone(EST).date() < datetime.today().astimezone(EST).date():
                         # compare episode id
                         if episodeID == episodeData["episodeID"]:
-                            logger.info(f"Episode: {episodeID}, Date: {firstAiredDate.astimezone(EST).date()}", flush=True)
+                            logger.info(f"Episode: {episodeID}, Date: {firstAiredDate.astimezone(EST).date()}")
                             episodeExists = True
 
                             # check if the episode has been downloaded
@@ -196,7 +196,7 @@ while(True):
                                         torrentID = results["data"]
                                         logger.debug(f"Torrent ID: {torrentID}")
                                         results = torrent_client.getTorrentFiles(torrentID)
-                                        logger.debug(results, flush=True)
+                                        logger.debug(results)
 
                                         # push torrent id to database
                                         for i in data["episodes"]:
@@ -291,7 +291,7 @@ while(True):
                     except:
                         # print("first aired: {}".format(season[episode]["firstAired"]), flush=True)
                         firstAiredDate = datetime.today().astimezone(EST) - timedelta(days=1)
-                    print(f"Episode: {episodeID}, Date Computed: {firstAiredDate.astimezone(EST).date()}, Date: {episode['air_date']}", flush=True)
+                    logger.info(f"Episode: {episodeID}, Date Computed: {firstAiredDate.astimezone(EST).date()}, Date: {episode['air_date']}")
                     if firstAiredDate.astimezone(EST).date() < datetime.today().astimezone(EST).date():
                         ### create entry
                         print("need to create {}".format(episodeID))

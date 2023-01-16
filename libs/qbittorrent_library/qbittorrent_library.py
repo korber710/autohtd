@@ -21,7 +21,6 @@ class QBittorrentController:
         }
         logger.info("Logging in to QBittorrent")
         try:
-            print(self.password)
             self.qb.login("admin", self.password)
         except Exception as e:
             returnObj["result"] = -1
