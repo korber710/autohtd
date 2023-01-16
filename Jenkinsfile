@@ -18,6 +18,7 @@ pipeline {
                     //     sh "cp $SECRET_FILE .env"
                     //     sh "ls -lah"
                     // }
+
                     // Build doownloader-app docker
                     dir("downloader-app") {
                         sh 'ls -a'
@@ -32,6 +33,7 @@ pipeline {
 
                     // Build front-end
                     dir("dashboard-app") {
+                        sh "echo \"REACT_APP_HOST_IP=$REACT_APP_HOST_IP\" > .env"
                         sh 'ls -a'
                         sh 'docker-compose build'
                     }
@@ -41,8 +43,6 @@ pipeline {
         stage('Setup') {
             steps {
                 script {
-                    // TODO: Copy .env
-
                     // Bring down old downloader-app docker
                     dir("downloader-app") {
                         sh 'docker-compose down'
