@@ -97,7 +97,7 @@ while(True):
                 logger.exception(e)
                 continue
             if results["result"] != 0:
-                logger.warn(f"Could not find {item[1]} in tv db")
+                logger.warning(f"Could not find {item[1]} in tv db")
                 continue
 
             # set the show object and get show names
@@ -250,7 +250,7 @@ while(True):
                                         if os.path.exists(torrentPath):
                                             # check path on database
                                             if os.path.exists(os.path.join(os.sep, *item[3].split(","))) == False:
-                                                logger.warn("Path doesn't exist")
+                                                logger.warning("Path doesn't exist")
                                                 logger.debug(os.path.join(os.sep, *item[3].split(",")))
                                                 try:
                                                     os.makedirs(os.path.join(os.sep, *item[3].split(",")))
