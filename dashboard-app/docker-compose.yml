@@ -1,11 +1,18 @@
 # Build from within this directory
 # eg. docker-compose build
-# 
 
-# The dashboard service runs the front-end app
-dashboard:
-  build: .
-  dockerfile: Dockerfile
-  ports:
-    - '80:80'
-  container_name: dashboard-app
+version: "3.9"
+services:
+  # The dashboard service runs the front-end app
+  dashboard:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - '80:80'
+    container_name: dashboard-app
+    environment:
+      - REACT_APP_HOST_IP
+    logging:
+      options:
+        max-size: "10m"

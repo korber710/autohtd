@@ -68,7 +68,7 @@ class TorrentController:
         try:
             magnetSearch = Soup(soup.find('div', {'class': 'box-info torrent-detail-page  vpn-info-wrap'}).html).find('a')
             for i in magnetSearch:
-                if "magnet" in i.attrs['href']:
+                if i.attrs['href'].startswith("magnet"):
                     magnetLink = i.attrs['href']
         except:
             returnObj["result"] = -1

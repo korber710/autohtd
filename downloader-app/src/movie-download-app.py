@@ -58,7 +58,6 @@ while(True):
         cur.execute("SELECT * FROM public.movies")
         items = cur.fetchall()
         print(items)
-        exit(0)
 
         results = delugeObj.getTorrents()
         print("getTorrents: {}".format(results), flush=True)

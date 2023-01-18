@@ -8,7 +8,6 @@ import Container from 'react-bootstrap/Container'
 import Col from 'react-bootstrap/Col'
 import Row from 'react-bootstrap/Row'
 import Table from 'react-bootstrap/Table'
-import Toast from 'react-bootstrap/Toast'
 import {toast, ToastContainer} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Spinner from 'react-bootstrap/Spinner'
@@ -48,7 +47,7 @@ export class Tv extends React.Component {
             season: parseInt(this.state.seasonChoice, 10),
             current: []
         }
-        axios.post(`http://${REACT_APP_HOST_IP}:5000/api/v1/tv/add`, data)
+        axios.post(`http://${process.env.REACT_APP_HOST_IP}:5000/api/v1/tv/add`, data)
         .then(res => {
             console.log(res.data)
             toast.success(
@@ -71,7 +70,7 @@ export class Tv extends React.Component {
                     <Spinner style={{display: 'inline-block'}} animation="grow" variant="dark" />
                 </div>
         })
-        axios.post(`http://${REACT_APP_HOST_IP}:5000/api/v1/tv/search`, {name: this.state.searchShow})
+        axios.post(`http://${process.env.REACT_APP_HOST_IP}:5000/api/v1/tv/search`, {name: this.state.searchShow})
         .then(res => {
             console.log(res.data)
             this.setState({returnDesc: res.data.description})
