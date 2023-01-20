@@ -168,7 +168,7 @@ while(True):
                             if episodeData["completed"] == False:
                                 # check if the torrent has been completed
                                 if episodeData["torrentID"] == "":
-                                    if (torrent_count < 8):
+                                    if torrent_count < 4:
                                         # search for torrent with show name and episode id
                                         if item[1] == "Big Brother":
                                             searchQuery = '{} US {}'.format(item[1], episodeID)
@@ -323,7 +323,7 @@ while(True):
                         magnetLink = results["data"]
                         logger.debug(f"Magnet Link: {magnetLink}")
 
-                        if (torrent_count < 8):
+                        if torrent_count < 4:
                             results = torrent_client.addTorrent(magnetLink)
                             if results["result"] != 0:
                                 continue
