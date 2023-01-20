@@ -105,11 +105,11 @@ while(True):
             show_list = []
             try:
                 for show in show_obj["tv_shows"]:
-                    logger.debug(f"Country code: {item[5]}")
                     if item[5] == None:
                         country_code = ["CA", "US"]
                     else:
                         country_code = [item[5]]
+                    logger.debug(f"Country code: {item[5]}, {country_code}")
                     if show["country"] in country_code:
                         show_list.append(show["name"])
                     else:
