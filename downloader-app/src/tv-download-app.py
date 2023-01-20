@@ -104,12 +104,12 @@ while(True):
             show_obj = results["data"]
             show_list = []
             try:
+                if item[5] == None:
+                    country_code = ["CA", "US"]
+                else:
+                    country_code = [item[5]]
+                logger.debug(f"Country code: {item[5]}, {country_code}")
                 for show in show_obj["tv_shows"]:
-                    if item[5] == None:
-                        country_code = ["CA", "US"]
-                    else:
-                        country_code = [item[5]]
-                    logger.debug(f"Country code: {item[5]}, {country_code}")
                     if show["country"] in country_code:
                         show_list.append(show["name"])
                     else:
