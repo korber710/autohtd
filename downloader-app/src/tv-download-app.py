@@ -104,8 +104,13 @@ while(True):
             show_obj = results["data"]
             show_list = []
             try:
+                if item[5] == None:
+                    country_code = ["CA", "US"]
+                else:
+                    country_code = [item[5]]
+                logger.debug(f"Country code: {item[5]}, {country_code}")
                 for show in show_obj["tv_shows"]:
-                    if show["country"] in ["CA", "US"]:
+                    if show["country"] in country_code:
                         show_list.append(show["name"])
                     else:
                         show_list.append("")
@@ -163,7 +168,7 @@ while(True):
                             if episodeData["completed"] == False:
                                 # check if the torrent has been completed
                                 if episodeData["torrentID"] == "":
-                                    if (torrent_count < 8):
+                                    if torrent_count < 4:
                                         # search for torrent with show name and episode id
                                         if item[1] == "Big Brother":
                                             searchQuery = '{} US {}'.format(item[1], episodeID)
@@ -318,7 +323,7 @@ while(True):
                         magnetLink = results["data"]
                         logger.debug(f"Magnet Link: {magnetLink}")
 
-                        if (torrent_count < 8):
+                        if torrent_count < 4:
                             results = torrent_client.addTorrent(magnetLink)
                             if results["result"] != 0:
                                 continue
