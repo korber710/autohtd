@@ -11,6 +11,7 @@ import urllib.parse as urlparse
 from urllib.parse import urlencode
 import requests
 
+
 def get_season_episodes(show, season):
     """
     Creates a list of episode objects from show details.
@@ -40,6 +41,7 @@ def get_season_episodes(show, season):
     # return new list
     return season_list
 
+
 def get_season_numbers(show):
     """
     Creates a list of season numbers from show details.
@@ -67,6 +69,7 @@ def get_season_numbers(show):
     # return new list
     return season_list
 
+
 class TVSearchController:
     """
     A class to lookup tv shows and get airdates.
@@ -79,7 +82,7 @@ class TVSearchController:
         Base url for searching on episodate
     base_url_lookup : str
         Base url for lookup on episodate
-        
+
     Methods
     -------
     search(name, page=None):
@@ -87,6 +90,7 @@ class TVSearchController:
     lookup(id):
         Returns the show details from Episodate
     """
+
     def __init__(self):
         self.base_url_search = "https://www.episodate.com/api/search?"
         self.base_url_lookup = "https://www.episodate.com/api/show-details?"
@@ -110,15 +114,12 @@ class TVSearchController:
         """
 
         # setup response obj
-        return_obj = {
-            "result": -1,
-            "description": "",
-            "data": ""
-        }
+        return_obj = {"result": -1, "description": "", "data": ""}
 
         # create dict from given parameters to be converted into url
         params = {"q": name}
-        if page: params["page"] = page
+        if page:
+            params["page"] = page
 
         # form url for request
         url_parts = list(urlparse.urlparse(self.base_url_search))
@@ -160,13 +161,9 @@ class TVSearchController:
         return_object : dict
             Dictionary containing information about the show
         """
-        
+
         # setup response obj
-        return_obj = {
-            "result": -1,
-            "description": "",
-            "data": ""
-        }
+        return_obj = {"result": -1, "description": "", "data": ""}
 
         # create dict from given parameters to be converted into url
         params = {"q": id}
@@ -198,6 +195,7 @@ class TVSearchController:
         return_obj["data"] = response.json()
         return return_obj
 
+
 # main - example of usage
 if __name__ == "__main__":
     import json
@@ -205,7 +203,7 @@ if __name__ == "__main__":
 
     # setup controller
     test_obj = TVSearchController()
-    
+
     # test search
     search_term = "Big Brother Canada"
     x = test_obj.search(search_term)
