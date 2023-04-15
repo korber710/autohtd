@@ -38,39 +38,15 @@ class EpisodateAPI:
         :param name: The name of the TV show to search for.
         :param page: Page number to return from the search, defaults to '1'.
         """
-        # # create dict from given parameters to be converted into url
-        # params = {"q": name}
-        # if page:
-        #     params["page"] = page
-
-        # # form url for request
-        # url_parts = list(urlparse.urlparse(self.search_base_url))
-        # query = dict(urlparse.parse_qsl(url_parts[4]))
-        # query.update(params)
-        # url_parts[4] = urlencode(query, quote_via=urlparse.quote)
-
-        # # send request
-        # request_url = urlparse.urlunparse(url_parts)
-        # response = requests.get(request_url)
-
-        # # check response status code
-        # if response.status_code != 200:
-        #     pass
-
-        # return response.json()
-
         params = {"q": name}
         if page:
             params["page"] = page
         encoded_params = urllib.parse.urlencode(params)
         search_url = f"{self.search_base_url}{encoded_params}"
-        print(search_url)
 
         response = requests.get(search_url)
-        
+
         return response.json()["tv_shows"]
-
-
 
     def lookup(self, identifier: str):
         """
@@ -79,8 +55,7 @@ class EpisodateAPI:
         params = {"q": identifier}
         encoded_params = urllib.parse.urlencode(params)
         lookup_url = f"{self.lookup_base_url}{encoded_params}"
-        print(lookup_url)
 
         response = requests.get(lookup_url)
-        
+
         return response.json()

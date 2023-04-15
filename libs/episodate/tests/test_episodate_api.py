@@ -2,18 +2,19 @@ import pytest
 import pytest_mock
 import episodate
 
+
 @pytest.mark.parametrize("tv_show_name", ["arrow", "Bachelor"])
 def test_search_with_valid_name(mocker, tv_show_name):
     # Arrange
     mock_response = mocker.Mock()
     mock_response.status_code = 200
-    mock_response.json.return_value = {'tv_shows': {}}
-    mocker.patch('requests.get', return_value=mock_response)
+    mock_response.json.return_value = {"tv_shows": {}}
+    mocker.patch("requests.get", return_value=mock_response)
 
     # Act
     api_controller = episodate.EpisodateAPI()
     tv_shows = api_controller.search(tv_show_name)
-    
+
     # Assert
     assert tv_shows == {}
 
@@ -24,12 +25,12 @@ def test_lookup_with_valid_identifier(mocker, tv_show_id):
     mock_response = mocker.Mock()
     mock_response.status_code = 200
     mock_response.json.return_value = {}
-    mocker.patch('requests.get', return_value=mock_response)
+    mocker.patch("requests.get", return_value=mock_response)
 
     # Act
     api_controller = episodate.EpisodateAPI()
     show_details = api_controller.lookup(tv_show_id)
-    
+
     # Assert
     assert show_details == {}
 
@@ -43,12 +44,21 @@ def test_search(tv_show_name):
     # Act
     api_controller = episodate.EpisodateAPI()
     tv_shows = api_controller.search(tv_show_name)
-    
+
     # Assert
     assert tv_shows != None
     assert len(tv_shows) > 0
 
 
 @pytest.mark.integration
-def test_lookup():
+@pytest.mark.parametrize("tv_show_id", ["arrow", "29560"])
+def test_lookup(tv_show_id):
+    # Arrange
     pass
+
+    # Act
+    api_controller = episodate.EpisodateAPI()
+    show_details = api_controller.lookup(tv_show_id)
+
+    # Assert
+    assert show_details != None
