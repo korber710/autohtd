@@ -51,6 +51,8 @@ class EpisodateAPI:
     def lookup(self, identifier: str):
         """
         Gets details related to a TV show.
+
+        :param identifier: The permalink or id of the TV show to search for.
         """
         params = {"q": identifier}
         encoded_params = urllib.parse.urlencode(params)

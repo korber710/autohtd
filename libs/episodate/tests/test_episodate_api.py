@@ -1,5 +1,4 @@
 import pytest
-import pytest_mock
 import episodate
 
 
@@ -39,10 +38,9 @@ def test_lookup_with_valid_identifier(mocker, tv_show_id):
 @pytest.mark.parametrize("tv_show_name", ["arrow", "Bachelor"])
 def test_search(tv_show_name):
     # Arrange
-    pass
+    api_controller = episodate.EpisodateAPI()
 
     # Act
-    api_controller = episodate.EpisodateAPI()
     tv_shows = api_controller.search(tv_show_name)
 
     # Assert
@@ -54,10 +52,9 @@ def test_search(tv_show_name):
 @pytest.mark.parametrize("tv_show_id", ["arrow", "29560"])
 def test_lookup(tv_show_id):
     # Arrange
-    pass
+    api_controller = episodate.EpisodateAPI()
 
     # Act
-    api_controller = episodate.EpisodateAPI()
     show_details = api_controller.lookup(tv_show_id)
 
     # Assert
