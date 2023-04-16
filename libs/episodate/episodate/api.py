@@ -6,6 +6,7 @@ It uses HTTP to reach endpoints exposed by the Episodate server.
 
 import urllib
 import requests
+import re
 
 
 class EpisodateAPI:
@@ -36,8 +37,19 @@ class EpisodateAPI:
         etc.
 
         :param name: The name of the TV show to search for.
-        :param page: Page number to return from the search, defaults to '1'.
+        :param page: Page number to return from the search, defaults to 'None'.
         """
+        # Check inputs for errors
+        if not name:
+            raise ValueError("Name must not be empty.")
+        if re.search("^[ \\w\']+$", name) is None:
+            raise ValueError("Name must be alphanumeric with spaces and apostrophes.")
+        if not isinstance(page, int) and page is not None:
+            raise TypeError("Page must be an integer.")
+        if (page or page == 0) and page < 1:
+            raise ValueError("Page must be greater than or equal to 1.")
+
+        # Setup the url need for searching
         params = {"q": name}
         if page:
             params["page"] = page
